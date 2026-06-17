@@ -171,6 +171,12 @@
       font-weight: 800;
     }
 
+    .photo-avatar {
+      object-fit: cover;
+      border: 3px solid var(--purple-soft);
+      box-shadow: 0 0 32px rgba(168, 85, 247, 0.35);
+    }
+
     .profile-card h2 {
       margin-bottom: 8px;
     }
@@ -301,6 +307,41 @@
       color: var(--purple-soft);
     }
 
+    /* About buttons let visitors explore your story in small, clickable pieces. */
+    .about-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .about-tab {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(21, 16, 34, 0.9);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .about-tab.active,
+    .about-tab:hover {
+      border-color: var(--purple);
+      color: var(--purple-soft);
+      background: rgba(168, 85, 247, 0.16);
+    }
+
+    .about-detail {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
     /* Gallery tiles use gradients as placeholders until you add real photos. */
     .gallery-grid {
       display: grid;
@@ -332,6 +373,18 @@
       background:
         linear-gradient(180deg, transparent, rgba(11, 7, 20, 0.88)),
         linear-gradient(135deg, rgba(126, 34, 206, 0.6), rgba(21, 16, 34, 0.95));
+    }
+
+    .gallery-item.workspace-photo {
+      background:
+        linear-gradient(180deg, transparent 30%, rgba(11, 7, 20, 0.92)),
+        url("assets/workspace-thumbnail.jfif") center / cover;
+    }
+
+    .gallery-item.inspiration-photo {
+      background:
+        linear-gradient(180deg, transparent 30%, rgba(11, 7, 20, 0.92)),
+        url("assets/inspiration-design.png") center / cover;
     }
 
     .gallery-item h3 {
@@ -478,7 +531,7 @@
 
       <!-- Profile card: change the initials and stats to match you. -->
       <aside class="profile-card reveal">
-        <div class="avatar">ID</div>
+        <img class="avatar photo-avatar" src="assets/ipsita-profile.jpeg" alt="Photo of Ipsita Dash">
         <h2>Currently building</h2>
         <p>Small projects that help me practice layout, design, and interactivity.</p>
         <div class="stats">
@@ -493,15 +546,29 @@
     <section id="about" class="container reveal">
       <h2 class="section-title">About <span>Me</span></h2>
       <div class="bio-grid">
-        <p class="about-text">
-          I am Ipsita Dash, a beginner web developer learning how to turn ideas into clean,
-          responsive websites. I enjoy experimenting with layouts, colors, and small JavaScript
-          interactions that make a page feel more alive.
-        </p>
+        <div>
+          <p class="about-text">
+            I am Ipsita Dash, a software engineer by profession and a 2023 Computer Science
+            Engineering graduate. I spent two years working in fintech, where I helped build
+            scalable systems and integrate them across multiple products. I enjoy turning complex
+            product problems into reliable, user-friendly technology.
+          </p>
+          <div class="about-tabs" aria-label="More about Ipsita">
+            <button class="about-tab active" type="button" data-about="fintech">Fintech Work</button>
+            <button class="about-tab" type="button" data-about="systems">Scalable Systems</button>
+            <button class="about-tab" type="button" data-about="graduate">CSE Graduate</button>
+            <button class="about-tab" type="button" data-about="spark">Fun Side</button>
+          </div>
+          <p class="about-detail" id="aboutDetail">
+            In fintech, I worked close to real product needs, where reliability, speed, and clear
+            integrations matter every day.
+          </p>
+        </div>
         <ul class="quick-facts">
-          <li><strong>Learning:</strong> HTML, CSS, and JavaScript</li>
-          <li><strong>Style:</strong> Clean, modern, and thoughtful</li>
-          <li><strong>Goal:</strong> Build projects I can proudly share</li>
+          <li><strong>Profession:</strong> Software Engineer</li>
+          <li><strong>Experience:</strong> 2 years in fintech</li>
+          <li><strong>Education:</strong> 2023 CSE graduate</li>
+          <li><strong>Focus:</strong> Scalable systems and product integrations</li>
         </ul>
       </div>
     </section>
@@ -546,7 +613,7 @@
     <section id="gallery" class="container reveal">
       <h2 class="section-title">Photo <span>Gallery</span></h2>
       <div class="gallery-grid">
-        <article class="gallery-item">
+        <article class="gallery-item workspace-photo">
           <div>
             <h3>Workspace</h3>
             <p>A place for study, notes, and ideas.</p>
@@ -558,7 +625,7 @@
             <p>Screenshots of websites and experiments.</p>
           </div>
         </article>
-        <article class="gallery-item">
+        <article class="gallery-item inspiration-photo">
           <div>
             <h3>Inspiration</h3>
             <p>Designs, colors, and references I like.</p>
@@ -647,6 +714,27 @@
 
     revealItems.forEach(function(item) {
       revealObserver.observe(item);
+    });
+
+    // This script changes the About detail text when a visitor clicks a tab.
+    const aboutTabs = document.querySelectorAll(".about-tab");
+    const aboutDetail = document.getElementById("aboutDetail");
+    const aboutDetails = {
+      fintech: "In fintech, I worked close to real product needs, where reliability, speed, and clear integrations matter every day.",
+      systems: "I like thinking about how systems can grow gracefully, stay maintainable, and connect cleanly across different product experiences.",
+      graduate: "I graduated in Computer Science Engineering in 2023, which gave me a strong base in programming, problem solving, and software fundamentals.",
+      spark: "Outside the serious engineering bits, I enjoy experimenting with design, polishing small details, and making websites feel a little more alive."
+    };
+
+    aboutTabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        aboutTabs.forEach(function(item) {
+          item.classList.remove("active");
+        });
+
+        tab.classList.add("active");
+        aboutDetail.textContent = aboutDetails[tab.dataset.about];
+      });
     });
 
     // This script shows a friendly message when the contact form is submitted.
