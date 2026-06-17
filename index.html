@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic page setup: character support, mobile scaling, and browser title -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A personal portfolio website for a beginner developer.">
+  <title>Ipsita Dash | Portfolio</title>
+
+  <style>
+    /* CSS variables make it easy to reuse the same colors everywhere. */
+    :root {
+      --bg: #0b0714;
+      --panel: #151022;
+      --panel-light: #201832;
+      --purple: #a855f7;
+      --purple-soft: #d8b4fe;
+      --text: #f5f3ff;
+      --muted: #b8aecb;
+      --border: #332646;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    }
+
+    /* The reset below removes default spacing and makes sizing easier. */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(168, 85, 247, 0.25), transparent 34rem),
+        linear-gradient(135deg, #0b0714 0%, #120b20 45%, #080610 100%);
+      min-height: 100vh;
+    }
+
+    /* A reusable wrapper keeps content readable on large screens. */
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    /* Header and navigation sit at the top of the page. */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(11, 7, 20, 0.85);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-weight: 800;
+      color: var(--purple-soft);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--purple-soft);
+    }
+
+    /* Hero is the first big introduction area visitors see. */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 40px;
+      min-height: 72vh;
+      padding: 72px 0;
+    }
+
+    .eyebrow {
+      color: var(--purple-soft);
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 8vw, 5.5rem);
+      line-height: 0.95;
+      margin-bottom: 22px;
+    }
+
+    .hero p {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 28px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 18px;
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      background: rgba(168, 85, 247, 0.16);
+    }
+
+    .button.primary {
+      background: var(--purple);
+      color: #170825;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(168, 85, 247, 0.24);
+    }
+
+    /* The profile card adds a visual focal point without needing an image. */
+    .profile-card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: linear-gradient(180deg, var(--panel-light), var(--panel));
+      box-shadow: var(--shadow);
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 22px;
+      color: #170825;
+      background: linear-gradient(135deg, var(--purple-soft), var(--purple));
+      font-size: 2.5rem;
+      font-weight: 800;
+    }
+
+    .profile-card h2 {
+      margin-bottom: 8px;
+    }
+
+    .profile-card p {
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--purple-soft);
+      font-size: 1.4rem;
+    }
+
+    /* Sections create clear blocks for About, Projects, Skills, and Contact. */
+    section {
+      padding: 64px 0;
+    }
+
+    .section-title {
+      margin-bottom: 24px;
+      font-size: 2rem;
+    }
+
+    .section-title span {
+      color: var(--purple-soft);
+    }
+
+    .about-text {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(21, 16, 34, 0.88);
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: var(--purple-soft);
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .tag-list li {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--purple-soft);
+      background: rgba(168, 85, 247, 0.1);
+      font-size: 0.88rem;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .skills li {
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    /* Bio cards give your About section a little more personality. */
+    .bio-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .quick-facts {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .quick-facts li {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(168, 85, 247, 0.08);
+      color: var(--muted);
+    }
+
+    .quick-facts strong {
+      color: var(--purple-soft);
+    }
+
+    /* Gallery tiles use gradients as placeholders until you add real photos. */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .gallery-item {
+      min-height: 210px;
+      display: flex;
+      align-items: end;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, transparent, rgba(11, 7, 20, 0.88)),
+        linear-gradient(135deg, rgba(168, 85, 247, 0.55), rgba(32, 24, 50, 0.95));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .gallery-item:nth-child(2) {
+      background:
+        linear-gradient(180deg, transparent, rgba(11, 7, 20, 0.88)),
+        linear-gradient(135deg, rgba(216, 180, 254, 0.45), rgba(55, 36, 82, 0.95));
+    }
+
+    .gallery-item:nth-child(3) {
+      background:
+        linear-gradient(180deg, transparent, rgba(11, 7, 20, 0.88)),
+        linear-gradient(135deg, rgba(126, 34, 206, 0.6), rgba(21, 16, 34, 0.95));
+    }
+
+    .gallery-item h3 {
+      color: var(--text);
+    }
+
+    .gallery-item p {
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .contact-box {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 24px;
+      align-items: start;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(21, 16, 34, 0.95));
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .contact-form label {
+      display: grid;
+      gap: 6px;
+      color: var(--purple-soft);
+      font-weight: 700;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(11, 7, 20, 0.72);
+      font: inherit;
+    }
+
+    .contact-form textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .form-message {
+      min-height: 24px;
+      color: var(--purple-soft);
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 28px 0;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    /* This class starts hidden; JavaScript adds .show when the item scrolls in. */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Media queries adjust layout for tablets and phones. */
+    @media (max-width: 800px) {
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        gap: 10px;
+      }
+
+      .hero,
+      .grid,
+      .bio-grid,
+      .gallery-grid,
+      .contact-box {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 48px 0;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-links {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header: the navigation links jump to sections lower on this page. -->
+  <header>
+    <nav class="container">
+      <a class="logo" href="#">Ipsita Dash</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero: replace the text below with your own introduction. -->
+    <section class="hero container">
+      <div class="reveal">
+        <p class="eyebrow">Beginner Web Developer</p>
+        <h1>Hi, I am Ipsita Dash.</h1>
+        <p>
+          I am learning to build beautiful, useful websites with HTML, CSS, and JavaScript.
+          This portfolio is my home base for projects, experiments, and the skills I am growing.
+        </p>
+        <div class="button-row">
+          <a class="button primary" href="#projects">View Projects</a>
+          <a class="button" href="#contact">Contact Me</a>
+        </div>
+      </div>
+
+      <!-- Profile card: change the initials and stats to match you. -->
+      <aside class="profile-card reveal">
+        <div class="avatar">ID</div>
+        <h2>Currently building</h2>
+        <p>Small projects that help me practice layout, design, and interactivity.</p>
+        <div class="stats">
+          <div class="stat"><strong>3</strong><span>Projects</span></div>
+          <div class="stat"><strong>5</strong><span>Skills</span></div>
+          <div class="stat"><strong>1</strong><span>Goal</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- About: a short personal story helps visitors understand you. -->
+    <section id="about" class="container reveal">
+      <h2 class="section-title">About <span>Me</span></h2>
+      <div class="bio-grid">
+        <p class="about-text">
+          I am Ipsita Dash, a beginner web developer learning how to turn ideas into clean,
+          responsive websites. I enjoy experimenting with layouts, colors, and small JavaScript
+          interactions that make a page feel more alive.
+        </p>
+        <ul class="quick-facts">
+          <li><strong>Learning:</strong> HTML, CSS, and JavaScript</li>
+          <li><strong>Style:</strong> Clean, modern, and thoughtful</li>
+          <li><strong>Goal:</strong> Build projects I can proudly share</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Projects: duplicate a card when you want to add another project. -->
+    <section id="projects" class="container reveal">
+      <h2 class="section-title">Featured <span>Projects</span></h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Portfolio Website</h3>
+          <p>A dark purple personal website built with one HTML file.</p>
+          <ul class="tag-list">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>To-Do App</h3>
+          <p>A simple task list idea where users can add, complete, and remove tasks.</p>
+          <ul class="tag-list">
+            <li>Forms</li>
+            <li>DOM</li>
+            <li>Practice</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Weather Card</h3>
+          <p>A small design concept for showing temperature, location, and forecast details.</p>
+          <ul class="tag-list">
+            <li>Design</li>
+            <li>Layout</li>
+            <li>API Soon</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Gallery: replace these placeholders with real photos later. -->
+    <section id="gallery" class="container reveal">
+      <h2 class="section-title">Photo <span>Gallery</span></h2>
+      <div class="gallery-grid">
+        <article class="gallery-item">
+          <div>
+            <h3>Workspace</h3>
+            <p>A place for study, notes, and ideas.</p>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <div>
+            <h3>Projects</h3>
+            <p>Screenshots of websites and experiments.</p>
+          </div>
+        </article>
+        <article class="gallery-item">
+          <div>
+            <h3>Inspiration</h3>
+            <p>Designs, colors, and references I like.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Skills: edit these list items as you learn new tools. -->
+    <section id="skills" class="container reveal">
+      <h2 class="section-title">My <span>Skills</span></h2>
+      <ul class="skills">
+        <li>HTML Basics</li>
+        <li>CSS Layout</li>
+        <li>Responsive Design</li>
+        <li>JavaScript Basics</li>
+        <li>Problem Solving</li>
+      </ul>
+    </section>
+
+    <!-- Contact: use real links when you are ready to share the site. -->
+    <section id="contact" class="container reveal">
+      <div class="contact-box">
+        <div>
+          <h2 class="section-title">Let's <span>Connect</span></h2>
+          <p class="about-text">Have an opportunity, idea, or friendly hello? I would love to hear from you.</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <label>
+            Name
+            <input type="text" name="name" placeholder="Your name" required>
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="your.email@example.com" required>
+          </label>
+          <label>
+            Message
+            <textarea name="message" placeholder="Write your message here..." required></textarea>
+          </label>
+          <button class="button primary" type="submit">Send Message</button>
+          <p class="form-message" id="formMessage"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer: a simple closing line at the bottom of the page. -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Ipsita Dash. Built with HTML, CSS, and JavaScript.</p>
+    </div>
+  </footer>
+
+  <script>
+    // This script highlights the nav link for the section currently on screen.
+    const navLinks = document.querySelectorAll(".nav-links a");
+    const sections = document.querySelectorAll("main section[id]");
+
+    function updateActiveLink() {
+      let currentSection = "";
+
+      sections.forEach(function(section) {
+        const sectionTop = section.offsetTop - 120;
+
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach(function(link) {
+        const linkTarget = link.getAttribute("href");
+        link.classList.toggle("active", linkTarget === "#" + currentSection);
+      });
+    }
+
+    // This script fades sections in when they enter the browser window.
+    const revealItems = document.querySelectorAll(".reveal");
+    const revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealItems.forEach(function(item) {
+      revealObserver.observe(item);
+    });
+
+    // This script shows a friendly message when the contact form is submitted.
+    const contactForm = document.getElementById("contactForm");
+    const formMessage = document.getElementById("formMessage");
+
+    if (contactForm) {
+      contactForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        formMessage.textContent = "Thank you! Your message is ready to be connected to a real email service.";
+        contactForm.reset();
+      });
+    }
+
+    window.addEventListener("scroll", updateActiveLink);
+    updateActiveLink();
+  </script>
+</body>
+</html>
